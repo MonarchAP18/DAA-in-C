@@ -1,71 +1,46 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <string.h>
 
-//d is number of characters in input alphabet
-#define d 256
+#define D 10
+#define Q 11
 
-void search(char pat[], char txt[], int q){
-    int M=strlen(pat);
-    int N=strlen(txt);
-    int i,j;
-    int p=0; //hash value of pattern
-    int t=0; //hash value of text
-    int h=1;
-    int k=0;
-
-    //value of h is "pow(d, M-1)%q"
-    for(i=0; i<M; i++){
-        h=(h*d)%q;
+int main() {
+    char T[] = "AKSHAYUDAYPADAMWAR";
+    char P[] = "AY";
+    int n = strlen(T);
+    int m = strlen(P);
+    int i, j;
+    int p = 0, t = 0;
+    int h = 1;
+    int count = 0;
+    for (i = 0; i < m-1; i++) {
+        h = (h * D) % Q;
     }
-
-    //calculate hash value of pattern and text of first window of text
-    for(i = 0; i<M; i++){
-        p=(d*p + pat[i]) % q;   //will be taken in ASCII
-        t=(d*t + txt[i]) % q;
+    for (i = 0; i < m; i++) {
+        p = (D*p + P[i]) % Q;
+        t = (D*t + T[i]) % Q;
     }
-
-    for(i=0; i<=N-M; i++){
-        //check hash value, if match, compare
-        if(p==t){
-            for(j=0; j<M; j++){
-                if(txt[i+j] != pat[j]){
+    for (i = 0; i <= n-m; i++) {
+        if (p == t) {
+            for (j = 0; j < m; j++) {
+                if (T[i+j] != P[j]) {
                     break;
                 }
             }
-
-            if(j==M){
-                k++;
+            if (j == m) {
                 printf("Pattern found at index %d\n", i);
+            } else {
+                count++;
             }
         }
-
-        if(i<N-M){
-            //if t=123 and next letter is 4, then change t to 234. remove 1 from start and add 4 at last.
-            t=(d*(t-txt[i]*h) + txt[i+M])%q;  //removing leading digit and adding trailing digit.
-            
-
-            if(t<0){  //if hash is negative
-                t=t+q;
+        if (i < n-m) {
+            t = (D*(t - T[i]*h) + T[i+m]) % Q;
+            if (t < 0) {
+                t = (t + Q);
             }
         }
     }
+    printf("Number of spurious hits: %d\n", count);
 
-    if(k==0){
-        printf("No match found\n");
-    }
-}
-
-int main(){
-    char txt[100];
-    char pat[10];
-    int q=17;
-
-    printf("\nEnter the text: ");
-    scanf("%s", txt);
-    printf("Enter the pattern to be found: ");
-    scanf("%s", pat);
-
-    search(pat, txt, q);
     return 0;
 }
