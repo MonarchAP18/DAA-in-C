@@ -5,8 +5,8 @@
 #define Q 11
 
 int main() {
-    char T[] = "AKSHAYUDAYPADAMWAR";
-    char P[] = "AY";
+    char T[] = "DAAINCLANGUAGE";
+    char P[] = "LA";
     int n = strlen(T);
     int m = strlen(P);
     int i, j;
